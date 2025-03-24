@@ -27,6 +27,7 @@ Une application web moderne pour la gestion d'un restaurant, permettant aux clie
 ## Prérequis
 
 - Node.js (v14 ou supérieur)
+- Jest pour les tests
 - MongoDB (installé localement ou service cloud)
 - npm ou yarn
 
