@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');                            // Importation de Mongoose pour interagir avec MongoDB
+const mongoose = require('mongoose');                            // Import Mongoose pour interagir avec MongoDB
 
 
-const orderSchema = new mongoose.Schema({                        // Définition du schéma pour une commande (Order)
+const orderSchema = new mongoose.Schema({                        // Schéma pour une commande (Order)
     orderNumber: { type: Number, required: true, unique: true }, // Numéro de la commande, obligatoire et unique
     items: [{                                                    // Liste des articles dans la commande
         item: { type: String, required: true },                  // Nom de l'article, obligatoire
@@ -77,4 +77,4 @@ class Order {                                                    // Classe Order
     }
 }
 
-module.exports = Order; // Exportation de la classe Order 
+module.exports = Order; // Export Order 
