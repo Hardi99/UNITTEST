@@ -1,24 +1,24 @@
-const mongoose = require('mongoose');         // Importation de Mongoose pour interagir avec MongoDB
+const mongoose = require('mongoose');         // Import Mongoose pour interagir avec MongoDB
 
-const menuItemSchema = new mongoose.Schema({  // Définition du schéma pour un article du menu
-    name: { type: String, required: true },   // Le nom de l'article du menu, obligatoire
-    price: { type: Number, required: true },  // Le prix de l'item de menu, obligatoire
-    description: String,                      // Description de l'article
+const menuItemSchema = new mongoose.Schema({  //  Schéma pour un article du menu
+    name: { type: String, required: true },   //  Nom de l'article du menu, obligatoire
+    price: { type: Number, required: true },  //  Prix de l'item de menu, obligatoire
+    description: String,                      //  Description de l'article
 
-    customizations: [{                        // Liste des personnalisations possibles pour cet articl
-        name: String,                         // Le nom
-        options: [String],                    // Les options disponibles
-        price: Number                         // Le prix supplémentaire
+    customizations: [{                        //  Liste des personnalisations possibles pour cet article
+        name: String,                         //  Nom
+        options: [String],                    //  Options disponibles
+        price: Number                         //  Prix du supplément
     }]
 });
 
 const MenuItem = mongoose.model('MenuItem', menuItemSchema); // Création de la fonction 'MenuItem' basé sur le schéma défini ci-dessus
 
-class Menu {                                   // fonction Menu pour gérer les opérations sur lesarticles du menu
+class Menu {                                   // Fonction Menu pour gérer les opérations sur lesarticles du menu
     constructor() {
         this.model = MenuItem;                 // On utilise le modèle MenuItem pour effectuer les opérations sur les articles
     }
-    async addItem(item) {                      // Ajout un nouvel article au menu
+    async addItem(item) {                      // Ajout un nouvel article dans le menu
     const newItem = new this.model(item);      // Création d'un nouvel objet basé sur le modèle MenuItem
       await newItem.save();                    // Sauvegarder un nouvel article dans la base de données
       return newItem;                          // Retourne l'article ajouté
@@ -41,7 +41,7 @@ class Menu {                                   // fonction Menu pour gérer les 
     }
     
     async removeCustomization(id, customizationId) { // Supprimer une personnalisation d'un article par l'ID 
-        return await this.model.findByIdAndUpdate( // Supprimer la personnalisation du tableau en utilisant son ID
+        return await this.model.findByIdAndUpdate(   // Supprimer la personnalisation du tableau en utilisant son ID
             id,
             { $pull: { customizations: { _id: customizationId } } }, // Retrait de la personnalisation
             { new: true }                        // Retourne l'objet mis à jour
@@ -53,4 +53,4 @@ class Menu {                                   // fonction Menu pour gérer les 
     }
 }
 
-module.exports = Menu; // Exportation de la classe Menu
+module.exports = Menu; // Export Menu
