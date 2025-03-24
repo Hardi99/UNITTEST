@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');                     // Importation de Mongoose pour interagir avec MongoDB
+const mongoose = require('mongoose');                     // Import Mongoose pour interagir avec MongoDB
 
-const paymentSchema = new mongoose.Schema({               // Définition du schéma pour un paiement
+const paymentSchema = new mongoose.Schema({               // Schéma pour un paiement
     orderNumber: { type: Number, required: true },        // Numéro de la commande, obligatoire
     amount: { type: Number, required: true },             // Montant du paiement, obligatoire
     status: {                                             // Statut du paiement (par défaut "en attente")
@@ -130,4 +130,4 @@ class PaymentSystem {                                     // Classe PaymentSyste
     }
 }
 
-module.exports = PaymentSystem;                            // Exportation de la classe PaymentSystem 
+module.exports = PaymentSystem; // Export PaymentSystem 
