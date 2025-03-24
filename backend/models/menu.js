@@ -1,56 +1,56 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');         // Importation de Mongoose pour interagir avec MongoDB
 
-const menuItemSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
-    description: String,
-    customizations: [{
-        name: String,
-        options: [String],
-        price: Number
+const menuItemSchema = new mongoose.Schema({  // Définition du schéma pour un article du menu
+    name: { type: String, required: true },   // Le nom de l'article du menu, obligatoire
+    price: { type: Number, required: true },  // Le prix de l'item de menu, obligatoire
+    description: String,                      // Description de l'article
+
+    customizations: [{                        // Liste des personnalisations possibles pour cet articl
+        name: String,                         // Le nom
+        options: [String],                    // Les options disponibles
+        price: Number                         // Le prix supplémentaire
     }]
 });
 
-const MenuItem = mongoose.model('MenuItem', menuItemSchema);
+const MenuItem = mongoose.model('MenuItem', menuItemSchema); // Création de la fonction 'MenuItem' basé sur le schéma défini ci-dessus
 
-class Menu {
+class Menu {                                   // fonction Menu pour gérer les opérations sur lesarticles du menu
     constructor() {
-        this.model = MenuItem;
+        this.model = MenuItem;                 // On utilise le modèle MenuItem pour effectuer les opérations sur les articles
+    }
+    async addItem(item) {                      // Ajout un nouvel article au menu
+    const newItem = new this.model(item);      // Création d'un nouvel objet basé sur le modèle MenuItem
+      await newItem.save();                    // Sauvegarder un nouvel article dans la base de données
+      return newItem;                          // Retourne l'article ajouté
     }
 
-    async addItem(item) {
-        const newItem = new this.model(item);
-        await newItem.save();
-        return newItem;
+    async modifyItem(id, newItem) {            // Modifier un article existant dans le menu en utilisant son ID
+        return await this.model.findByIdAndUpdate(id, newItem, { new: true }); // Recherche de l'item par son ID et met à jour 
     }
 
-    async modifyItem(id, newItem) {
-        return await this.model.findByIdAndUpdate(id, newItem, { new: true });
+    async removeItem(id) {                     // Supprimer un article du menu par son ID
+        return await this.model.findByIdAndDelete(id); // Recherche l'article par son ID et la supprimer
     }
 
-    async removeItem(id) {
-        return await this.model.findByIdAndDelete(id);
-    }
-
-    async addCustomization(id, customization) {
-        return await this.model.findByIdAndUpdate(
+    async addCustomization(id, customization) { // Ajouter une personnalisation à un article existant
+        return await this.model.findByIdAndUpdate( // On pousse la nouvelle personnalisation dans le tableau des personnalisations
             id,
-            { $push: { customizations: customization } },
-            { new: true }
+            { $push: { customizations: customization } }, // Ajout de la personnalisation
+            { new: true }                       // Retourne l'objet mis à jour
+        );
+    }
+    
+    async removeCustomization(id, customizationId) { // Supprimer une personnalisation d'un article par l'ID 
+        return await this.model.findByIdAndUpdate( // Supprimer la personnalisation du tableau en utilisant son ID
+            id,
+            { $pull: { customizations: { _id: customizationId } } }, // Retrait de la personnalisation
+            { new: true }                        // Retourne l'objet mis à jour
         );
     }
 
-    async removeCustomization(id, customizationId) {
-        return await this.model.findByIdAndUpdate(
-            id,
-            { $pull: { customizations: { _id: customizationId } } },
-            { new: true }
-        );
-    }
-
-    async getMenu() {
-        return await this.model.find();
+    async getMenu() {                             // Obtenir tous les articles du menu
+        return await this.model.find();           // Récupère tous les articles du menu dans la base de données
     }
 }
 
-module.exports = Menu;
+module.exports = Menu; // Exportation de la classe Menu
